@@ -4,5 +4,5 @@ module.exports = {
   googleClientSecret: "iR3meso_P62yx0EZZUe-7juq",
   mongoURI:
     "mongodb://hungtrn75:ABC123456@ds153763.mlab.com:53763/advanced-node",
-  cookieKey: "123123123"
+  cookieKey: "huong_giang"
 };

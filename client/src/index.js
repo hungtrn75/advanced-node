@@ -12,10 +12,11 @@ import reducers from "./reducers";
 import axios from "axios";
 window.axios = axios;
 
+let store;
 if (process.env.NODE_ENV === "production") {
-  var store = createStore(reducers, {}, applyMiddleware(reduxThunk));
+  store = createStore(reducers, {}, applyMiddleware(reduxThunk));
 } else {
-  var store = createStore(
+  store = createStore(
     reducers,
     {},
     composeWithDevTools(applyMiddleware(reduxThunk))
