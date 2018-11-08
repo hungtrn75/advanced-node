@@ -16,12 +16,12 @@ mongoose.Query.prototype.cache = function(options = {}) {
 
 mongoose.Query.prototype.exec = async function() {
   if (!this.useCached) return exec.apply(this, arguments);
-
-  const key = JSON.stringify(
-    Object.assign({}, this.getQuery(), {
+  const key = JSON.stringify({
+    ...this.getQuery(),
+    ...{
       collection: this.mongooseCollection.name
-    })
-  );
+    }
+  });
 
   //Have a value for 'key' in redis store
   const cachedValue = await client.hget(this.hashKey, key);
