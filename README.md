@@ -40,13 +40,13 @@ Run client
 ```
 yarn client
 ```
-URL: `localhost:3000` to see.
+URL endpoint: `localhost:3000`.
 
 Run server
 ```
 yarn server
 ```
-URL: `localhost:5000` to see.
+URL endpoint: `localhost:5000`.
 
 Or run both in dev mode
 ```
