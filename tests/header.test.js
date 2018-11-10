@@ -1,10 +1,22 @@
-describe("Test client: http://localhost:3000", () => {
-  beforeAll(async () => {
+const mongoose = require("mongoose");
+const Page = require("./helpers/page");
+
+let page;
+
+describe("Test header in client: http://localhost:3000", () => {
+  beforeEach(async () => {
+    page = await Page.build();
     await page.goto("http://localhost:3000/");
   });
 
+  afterEach(async () => {
+    page.close();
+  });
+
+  afterAll(() => mongoose.disconnect());
+
   it("the header had a correct text", async () => {
-    const text = await page.$eval("a.brand-logo", el => el.innerHTML);
+    const text = await page.getContentOf("a.brand-logo");
     expect(text).toEqual("Blogster");
   });
 
@@ -15,33 +27,8 @@ describe("Test client: http://localhost:3000", () => {
   });
 
   it("when signed in, shows logout button", async () => {
-    await page.goto("http://localhost:3000/");
-
-    const { Buffer } = require("safe-buffer");
-    const Keygrip = require("keygrip");
-    const keys = require("../config/keys");
-
-    const keygrip = new Keygrip([keys.cookieKey]);
-    const id = "5be38324f2ee8a2770948a7d";
-    const sessionObj = {
-      passport: {
-        user: id
-      }
-    };
-    const sessionString = Buffer.from(JSON.stringify(sessionObj)).toString(
-      "base64"
-    );
-    const sig = keygrip.sign("session=" + sessionString);
-
-    await page.setCookie({ name: "session", value: sessionString });
-    await page.setCookie({ name: "session.sig", value: sig });
-
-    await page.goto("http://localhost:3000/");
-    await page.waitFor('a[href="/auth/logout"]');
-    const result = await page.$eval(
-      'a[href="/auth/logout"]',
-      el => el.innerHTML
-    );
+    await page.login();
+    const result = await page.getContentOf('a[href="/auth/logout"]');
     expect(result).toEqual("Logout");
   });
 });
